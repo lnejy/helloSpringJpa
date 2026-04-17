@@ -135,6 +135,9 @@
         </div>
 
     </form>
-
+    <hr>
+    <footer>
+        <p th:text="${'실습 수행 일시: ' + #temporals.format(#temporals.createNow(), 'yyyy-MM-dd HH:mm:ss')} + ' | 학번: 2371263 | 성명: 원재연'"></p>
+    </footer>
 </body>
 </html>
