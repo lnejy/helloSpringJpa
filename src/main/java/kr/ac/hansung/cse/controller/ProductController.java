@@ -48,9 +48,16 @@ public class ProductController {
     // ─────────────────────────────────────────────────────────────────
 
     @GetMapping
-    public String listProducts(Model model) {
-        List<Product> products = productService.getAllProducts();
+    public String listProducts(@RequestParam(value = "search", required = false) String search,
+                               Model model) {
+        List<Product> products;
+        if (search != null && !search.isEmpty()) {
+            products = productService.searchProducts(search);
+        } else {
+            products = productService.getAllProducts();
+        }
         model.addAttribute("products", products);
+        model.addAttribute("searchKeyword", search); // 검색어 유지를 위해 전달
         return "productList";
     }
 

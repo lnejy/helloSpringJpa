@@ -37,6 +37,16 @@
 
     <h1>상품 목록</h1>
 
+    <div style="margin-bottom: 20px; background: #f8f9fa; padding: 15px; border-radius: 4px;">
+        <form th:action="@{/products}" method="get" style="display: flex; gap: 10px;">
+            <input type="text" name="search" th:value="${searchKeyword}"
+                   placeholder="상품명을 입력하세요"
+                   style="flex-grow: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+            <button type="submit" class="btn" style="margin-bottom: 0;">검색</button>
+            <a th:href="@{/products}" class="btn" style="margin-bottom: 0; background: #6c757d;">초기화</a>
+        </form>
+    </div>
+
     <!--
         th:if="${successMessage}":
         Model에 successMessage 속성이 있을 때만 이 div를 렌더링합니다.
