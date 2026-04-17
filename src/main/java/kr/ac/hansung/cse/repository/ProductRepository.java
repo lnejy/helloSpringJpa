@@ -138,13 +138,26 @@ public class ProductRepository {
      * JPQL의 LIKE 연산자를 사용하여 상품명에 키워드가 포함된 상품들을 조회합니다.
      * N+1 문제를 방지하기 위해 카테고리(category)를 JOIN FETCH로 함께 가져옵니다.
      */
-    public List<Product> findByNameContaining(String keyword) {
-        return entityManager.createQuery(
-                        "SELECT p FROM Product p " +
-                                "LEFT JOIN FETCH p.category " +
-                                "WHERE p.name LIKE :keyword " +
-                                "ORDER BY p.id ASC", Product.class)
-                .setParameter("keyword", "%" + keyword + "%")
-                .getResultList();
+    public List<Product> search(String keyword, Long categoryId) {
+        String jpql = "SELECT p FROM Product p LEFT JOIN FETCH p.category WHERE 1=1";
+
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            jpql += " AND p.name LIKE :keyword";
+        }
+        if (categoryId != null) {
+            jpql += " AND p.category.id = :categoryId";
+        }
+        jpql += " ORDER BY p.id ASC";
+
+        TypedQuery<Product> query = entityManager.createQuery(jpql, Product.class);
+
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            query.setParameter("keyword", "%" + keyword + "%");
+        }
+        if (categoryId != null) {
+            query.setParameter("categoryId", categoryId);
+        }
+
+        return query.getResultList();
     }
 }
